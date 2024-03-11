@@ -1,19 +1,70 @@
 {% extends 'bases/base.html' %}
-{% load static %}
+{% load i18n static %}
 {% block 'head' %}
-    <link rel="stylesheet" href="{% static 'bgremover/css/bgremover.css' %}">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    max-width: 800px;
+    width: 100%;
+    margin: auto;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  form {
+    margin-top: 50px;
+    text-align: center;
+  }
+
+  input[type="file"] {
+    margin-bottom: 20px;
+    padding: 8px;
+  }
+
+  button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #45a049;
+  }
+
+  .result-image {
+    margin-top: 50px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: auto;
+  }
+</style>
 {% endblock %}
 {% block 'body' %}
-<h1>Remover Fundo da Imagem</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="image" accept="image/*">
-        <button type="submit">Remover Fundo</button>
-    </form>
+<div class="container">
+  <h1>Remover Fundo da Imagem</h1>
+  <form method="post" enctype="multipart/form-data" action="{% url 'bgremover' %}">
+    {% csrf_token %}
+    <input type="file" name="image" accept="image/png">
+    <button type="submit">Remover Fundo</button>
+  </form>
 
-    {% if result_image %}
-    <h2>Imagem com Fundo Removido</h2>
-    <img src="{{ result_image }}" alt="Imagem com fundo removido">
-    {% endif %}
+  {% if result_image %}
+  <h2>Imagem com Fundo Removido</h2>
+  <img src="{{ result_image }}" alt="Imagem com fundo removido" class="result-image">
+  {% endif %}
 
+  {% if error_message %}
+  <p class="alert">{{ error_message }}</p>
+  {% endif %}
+</div>
 {% endblock %}
